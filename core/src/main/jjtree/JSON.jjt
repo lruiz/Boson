@@ -31,29 +31,26 @@ SKIP : {
     | < EOL : "\r" | "\n" | "\r\n" >
 }
 
+/* KEYWORDS */
+TOKEN : {
+    < TRUE : "true" >
+    | < FALSE : "false" >
+    | < NULL : "null" >
+}
 
 /* PUNCTUATION */
 TOKEN : {
-    < AMPERSAND : "&" >
-    | < BACKSLASH : "\\" >
-    | < COLON : ":" >
+    < COLON : ":" >
     | < COMMA : "," >
     | < DOUBLE_QUOTE : "\"" >
-    | < EQ : "=" >
     | < LBRACKET : "[" >
     | < LBRACE : "{" >
-    | < LPAREN : "(" >
     | < RBRACKET : "]" >
     | < RBRACE : "}" >
-    | < RPAREN : ")" >
     | < SINGLE_QUOTE : "'" >
-    | < SLASH : "/" >
 }
 
 /* LITERALS */
-
-
-
 TOKEN : {
     < ESCAPED_CHAR : "\\" ["\\","/", "b", "f", "n", "r", "t"] >
     < UNICODE_CHAR : "\\" "u" >
