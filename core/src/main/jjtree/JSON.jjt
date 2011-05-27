@@ -1,0 +1,60 @@
+options {
+    LOOKAHEAD = 1;
+    STATIC = false;
+    UNICODE_INPUT = true;
+    MULTI = true;
+    BUILD_NODE_FILES = false;
+    NODE_PREFIX = "";
+    NODE_DEFAULT_VOID = true;
+    NODE_USES_PARSER = false;
+    NODE_PACKAGE = "org.tautua.boson.json.ast";
+    DEBUG_PARSER = false;
+    DEBUG_TOKEN_MANAGER = false;
+    DEBUG_LOOKAHEAD = false;
+}
+
+PARSER_BEGIN(Parser)
+package org.tautua.boson.json.parser;
+
+public class Parser {
+
+
+}
+
+PARSER_END(Parser)
+
+
+/* WHITESPACE */
+SKIP : {
+    < SPACE : " " >
+    | < TAB : "\t" >
+    | < EOL : "\r" | "\n" | "\r\n" >
+}
+
+
+/* PUNCTUATION */
+TOKEN : {
+    < AMPERSAND : "&" >
+    | < BACKSLASH : "\\" >
+    | < COLON : ":" >
+    | < COMMA : "," >
+    | < DOUBLE_QUOTE : "\"" >
+    | < EQ : "=" >
+    | < LBRACKET : "[" >
+    | < LBRACE : "{" >
+    | < LPAREN : "(" >
+    | < RBRACKET : "]" >
+    | < RBRACE : "}" >
+    | < RPAREN : ")" >
+    | < SINGLE_QUOTE : "'" >
+    | < SLASH : "/" >
+}
+
+/* LITERALS */
+
+
+
+TOKEN : {
+    < ESCAPED_CHAR : "\\" ["\\","/", "b", "f", "n", "r", "t"] >
+    < UNICODE_CHAR : "\\" "u" >
+}

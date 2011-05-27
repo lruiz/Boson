@@ -1,0 +1,7 @@
+{
+    "firstName":"John",
+    "lastName":"Doe",
+    "age":15,
+    "roles":["ADMIN", "ANALYST"],
+    "status":"OK"
+}
