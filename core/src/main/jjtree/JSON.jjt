@@ -3,7 +3,7 @@ options {
     STATIC = false;
     UNICODE_INPUT = true;
     MULTI = true;
-    BUILD_NODE_FILES = false;
+    BUILD_NODE_FILES = true;
     NODE_PREFIX = "";
     NODE_DEFAULT_VOID = true;
     NODE_USES_PARSER = false;
@@ -16,8 +16,14 @@ options {
 PARSER_BEGIN(Parser)
 package org.tautua.boson.json.parser;
 
+import org.tautua.boson.json.ast.*;
+
 public class Parser {
 
+    public Node parse() throws ParseException {
+        Value();
+        return jjtree.rootNode();
+    }
 
 }
 
@@ -26,9 +32,10 @@ PARSER_END(Parser)
 
 /* WHITESPACE */
 SKIP : {
-    < SPACE : " " >
-    | < TAB : "\t" >
-    | < EOL : "\r" | "\n" | "\r\n" >
+    " "
+    | "\t"
+    | "\r"
+    | "\n"
 }
 
 /* KEYWORDS */
@@ -52,6 +59,62 @@ TOKEN : {
 
 /* LITERALS */
 TOKEN : {
-    < ESCAPED_CHAR : "\\" ["\\","/", "b", "f", "n", "r", "t"] >
-    < UNICODE_CHAR : "\\" "u" >
+  < STRING_LITERAL:
+      "\""
+      (
+        (~["\"","\\","\n","\r"])
+        | <ESCAPED_CHAR>
+        | <UNICODE_CHAR>
+      )*
+      "\""
+  >
+  | < INTEGER_NUMBER : ( <DIGIT> )+ ( <EXPONENT> )? >
+  | < FLOATING_NUMBER : ( <DIGIT> )+ "." ( <DIGIT> )* ( <EXPONENT> )?
+        | "."  ( <DIGIT> )+ ( <EXPONENT> )? >
+  | < #UNICODE_CHAR : "\\" "u" <HEXADECIMAL> <HEXADECIMAL> <HEXADECIMAL> <HEXADECIMAL> >
+  | < #ESCAPED_CHAR : "\\" ["\\", "/", "b", "f", "n", "r", "t"] >
+  | < #DIGIT : ["0"-"9"] >
+  | < #SIGN : ["-", "+"] >
+  | < #HEXADECIMAL : ["a"-"f", "A"-"F", "0"-"9"] >
+  | < #EXPONENT : ("e" | "E") ( <SIGN> )? ( <DIGIT> )+ >
+}
+
+
+void Object() #Instance : {} {
+    "{" ( members() )? "}"
+}
+
+void members() : {} {
+    Pair() ( "," Pair() )*
+}
+
+void Pair() #Member : {
+    Token t;
+} {
+    t = <STRING_LITERAL> { jjtThis.setName(t.image.substring(1, t.image.length()-1));} ":" Value()
+}
+
+void Array() #Array : {} {
+    "[" ( elements() )? "]"
+}
+
+void elements() : {} {
+    Value() ( "," Value() )*
+}
+
+void Value() : {} {
+    Literal() | Object() | Array()
+}
+
+void Literal() #Literal : {
+    Token t;
+} {
+    (
+      t = <STRING_LITERAL> { jjtThis.setValue(t.image.substring(1, t.image.length()-1)); }
+    | t = <INTEGER_NUMBER> { jjtThis.setValue(new Long(t.image)); }
+    | t = <FLOATING_NUMBER> { jjtThis.setValue(new Double(t.image)); }
+    | <TRUE> { jjtThis.setValue(true); }
+    | <FALSE> { jjtThis.setValue(false); }
+    | <NULL>
+    )
 }
