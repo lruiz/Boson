@@ -1,11 +1,10 @@
 package org.tautua.boson.json.core.adapters;
 
-import junit.framework.TestCase;
-import static org.tautua.boson.utils.Exceptions.rethrow;
-import org.tautua.boson.json.Context;
-import org.tautua.boson.json.ContextFactory;
-import org.tautua.boson.json.TypeAdapter;
-import org.tautua.boson.json.core.ContextFactoryImpl;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Test;
+import org.tautua.boson.json.core.LiteralAdapter;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -17,43 +16,46 @@ import java.io.StringWriter;
  * Time: 10:25:49 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class AbstractAdapterTest extends TestCase {
-    protected Context context;
-    protected ContextFactory factory;
-    private StringWriter output;
+public abstract class AbstractAdapterTest {
+   
+    public abstract LiteralAdapter getAdapter();
+    
+    public abstract Object[][] getReadParams();
 
-    protected StringWriter getOutput() {
-        if (output == null)
-            output = new StringWriter();
+    public abstract Object[][] getWriteParams();
+    
 
-        return output;
+    protected <T> void read(LiteralAdapter<T> adapter, Object val, T expected) {
+        T result = adapter.coerce(val);
+        assertThat("coerce fail",result, equalTo(expected));
     }
 
-    protected void tearDown() throws Exception {
-        output = null;
-    }
-
-    protected void setUp() throws Exception {
-        factory = new ContextFactoryImpl();
-        context = factory.create();
-    }
-
-    protected <T> T unmarshal(TypeAdapter<T> adapter, Object fromJsonObject) {
-        return adapter.read(fromJsonObject, context);
-    }
-
-    protected <T> void unmarshalAndAssert(TypeAdapter<T> adapter, Object fromJsonObject, T expected) {
-        T result = unmarshal(adapter, fromJsonObject);
-        assertEquals(expected, result);
-    }
-
-    protected <T> void marshalAndAssert(TypeAdapter<T> adapter, T fromJavaObject, String expected) {
+    protected <T> void write(LiteralAdapter<T> adapter, T val, String expected) {
         StringWriter w = new StringWriter();
         try {
-            adapter.write(fromJavaObject, w, context);
-            assertEquals(expected, w.toString());
+            adapter.write(val, w);
         } catch (IOException e) {
-            rethrow(e);
+            throw new RuntimeException(e);
         }
+        assertThat("write fail", w.toString(), equalTo(expected));
+
+    }
+
+    
+
+    @Test
+    public void execute() {
+        LiteralAdapter adapter = getAdapter();
+        Object[][] rparams = getReadParams();
+        Object[][] wparams = getWriteParams();
+        
+        for(int i = 0; i < rparams.length; i++) {
+            read(adapter, rparams[i][0], rparams[i][1]);
+        }
+
+        for(int i = 0; i < wparams.length; i++) {
+            write(adapter, wparams[i][0], (String) wparams[i][1]);
+        }
+
     }
 }

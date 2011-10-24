@@ -16,13 +16,16 @@
 
 package org.tautua.boson.json;
 
+import org.tautua.boson.json.core.ContainerAdapter;
+import org.tautua.boson.json.core.LiteralAdapter;
+
 import java.lang.reflect.Field;
 
 /**
  * @author Larry Ruiz
  */
 public interface TypeAdapterRegistry {
-    <T> TypeAdapter<T> findAdapter(Class<T> type);
-
-    TypeAdapter<?> findAdapter(Field field);
+    <T> LiteralAdapter<T> findLiteralAdapter(Class<T> type);
+    
+    ContainerAdapter findContainerAdapter(Class<?> containedType);
 }

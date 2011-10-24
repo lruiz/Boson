@@ -2,14 +2,8 @@ package org.tautua.boson.json.core;
 
 
 import org.junit.Test;
-import org.tautua.foo.Person;
 import org.tautua.boson.json.TypeAdapterRegistry;
-import org.tautua.boson.json.TypeAdapter;
 import org.tautua.boson.json.core.adapters.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,50 +20,37 @@ public class AdapterManagerTest {
     @Test
     public void testFindDefaultAdapters() {
         TypeAdapterRegistry amng = new TypeAdapterRegistryImpl();
-        TypeAdapter ta = amng.findAdapter(String.class);
+        LiteralAdapter ta = amng.findLiteralAdapter(String.class);
         assertTrue(ta instanceof StringAdapter);
-        ta = amng.findAdapter(Boolean.class);
+        ta = amng.findLiteralAdapter(Boolean.class);
         assertTrue(ta instanceof BooleanAdapter);
-        ta = amng.findAdapter(boolean.class);
+        ta = amng.findLiteralAdapter(boolean.class);
         assertTrue(ta instanceof BooleanAdapter);
-        ta = amng.findAdapter(Number.class);
+        ta = amng.findLiteralAdapter(Number.class);
         assertTrue(ta instanceof NumberAdapter.DoubleAdapter);
-        ta = amng.findAdapter(Byte.class);
+        ta = amng.findLiteralAdapter(Byte.class);
         assertTrue(ta instanceof NumberAdapter.ByteAdapter);
-        ta = amng.findAdapter(byte.class);
+        ta = amng.findLiteralAdapter(byte.class);
         assertTrue(ta instanceof NumberAdapter.ByteAdapter);
-        ta = amng.findAdapter(Short.class);
+        ta = amng.findLiteralAdapter(Short.class);
         assertTrue(ta instanceof NumberAdapter.ShortAdapter);
-        ta = amng.findAdapter(short.class);
+        ta = amng.findLiteralAdapter(short.class);
         assertTrue(ta instanceof NumberAdapter.ShortAdapter);
-        ta = amng.findAdapter(Integer.class);
+        ta = amng.findLiteralAdapter(Integer.class);
         assertTrue(ta instanceof NumberAdapter.IntegerAdapter);
-        ta = amng.findAdapter(int.class);
+        ta = amng.findLiteralAdapter(int.class);
         assertTrue(ta instanceof NumberAdapter.IntegerAdapter);
-        ta = amng.findAdapter(Long.class);
+        ta = amng.findLiteralAdapter(Long.class);
         assertTrue(ta instanceof NumberAdapter.LongAdapter);
-        ta = amng.findAdapter(long.class);
+        ta = amng.findLiteralAdapter(long.class);
         assertTrue(ta instanceof NumberAdapter.LongAdapter);
-        ta = amng.findAdapter(Float.class);
+        ta = amng.findLiteralAdapter(Float.class);
         assertTrue(ta instanceof NumberAdapter.FloatAdapter);
-        ta = amng.findAdapter(float.class);
+        ta = amng.findLiteralAdapter(float.class);
         assertTrue(ta instanceof NumberAdapter.FloatAdapter);
-        ta = amng.findAdapter(Double.class);
+        ta = amng.findLiteralAdapter(Double.class);
         assertTrue(ta instanceof NumberAdapter.DoubleAdapter);
-        ta = amng.findAdapter(double.class);
+        ta = amng.findLiteralAdapter(double.class);
         assertTrue(ta instanceof NumberAdapter.DoubleAdapter);
-
-        ta = amng.findAdapter(String[].class);
-        assertTrue(ta instanceof ArrayAdapter);
-
-        ta = amng.findAdapter(List.class);
-        assertEquals(ListAdapter.class, ta.getClass());
-        ta = amng.findAdapter(Set.class);
-        assertEquals(SetAdapter.class, ta.getClass());
-        ta = amng.findAdapter(Map.class);
-        assertEquals(MapAdapter.class, ta.getClass());
-
-        ta = amng.findAdapter(Person.class);
-        assertEquals(BeanAdapter.class, ta.getClass());
     }
 }

@@ -71,4 +71,8 @@ public class Person {
     public void addRole(String role){
         roles.add(role);
     }
+
+    public Status getStatus() {
+        return status;
+    }
 }

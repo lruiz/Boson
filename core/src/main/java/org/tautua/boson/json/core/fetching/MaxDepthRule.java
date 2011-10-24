@@ -16,8 +16,6 @@
 
 package org.tautua.boson.json.core.fetching;
 
-import org.tautua.boson.json.Context;
-
 import java.lang.reflect.Field;
 import java.sql.Date;
 
@@ -31,8 +29,8 @@ public class MaxDepthRule implements FetchRule {
         this.maxDepth = maxDepth;
     }
 
-    public Decision decide(Field field, Context context) {
-        int currentDepth = context.getStack().size();
+    public Decision decide(Field field) {
+        int currentDepth = 0;//context.getStack().size();
 
         // AT MINOR LEVEL THAN THE MAX
         if(currentDepth < maxDepth) {

@@ -16,9 +16,8 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.tautua.boson.json.Context;
 import org.tautua.boson.json.core.TypeAdapterRegistryImpl;
-import org.tautua.boson.json.core.AbstractAdapter;
+import org.tautua.boson.json.core.LiteralAdapter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -26,16 +25,16 @@ import java.io.Writer;
 /**
  * @author Larry Ruiz
  */
-public class StringAdapter extends AbstractAdapter<String> {
+public class StringAdapter extends LiteralAdapter<String> {
     public void register(TypeAdapterRegistryImpl adapterManager) {
         adapterManager.register(String.class, this);
     }
 
-    public String _read(Object value, Context context) {
+    public String _read(Object value) {
         return (String) value;
     }
 
-    public void _write(String s, Writer writer, Context context) throws IOException {
+    public void _write(String s, Writer writer) throws IOException {
         writer.append("\"").append(s).append("\"");
     }
 

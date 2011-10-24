@@ -16,8 +16,6 @@
 
 package org.tautua.boson.json.core.fetching;
 
-import org.tautua.boson.json.Context;
-
 import java.lang.reflect.Field;
 
 /**
@@ -32,7 +30,7 @@ public class FieldNameRule implements FetchRule {
         this.includes = includes;
     }
 
-    public Decision decide(Field field, Context context) {
+    public Decision decide(Field field) {
         if (field.getName().equals(fieldName)) {
             return includes ? Decision.FETCH : Decision.SKIP;
         }

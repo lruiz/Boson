@@ -9,10 +9,10 @@ public class FetchAllPlanTest extends TestCase {
     public void testFetchable() throws NoSuchFieldException {
         Class c = Person.class;
         FetchPlan fp = new FetchAllPlan();
-        assertTrue(fp.fetchable(c.getDeclaredField("firstName"), null));
-        assertTrue(fp.fetchable(c.getDeclaredField("age"), null));
-        assertTrue(fp.fetchable(c.getDeclaredField("status"), null));
-        assertTrue(fp.fetchable(c.getDeclaredField("currentTask"), null));
-        assertTrue(fp.fetchable(c.getDeclaredField("tasksQueue"), null));
+        assertTrue(fp.fetchable(c.getDeclaredField("firstName")));
+        assertTrue(fp.fetchable(c.getDeclaredField("age")));
+        assertTrue(fp.fetchable(c.getDeclaredField("status")));
+        assertTrue(fp.fetchable(c.getDeclaredField("currentTask")));
+        assertTrue(fp.fetchable(c.getDeclaredField("tasksQueue")));
     }
 }

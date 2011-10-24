@@ -16,7 +16,6 @@
 
 package org.tautua.boson.json.core.fetching;
 
-import org.tautua.boson.json.Context;
 import org.tautua.boson.json.FetchPlan;
 
 import java.lang.reflect.Field;
@@ -34,9 +33,9 @@ public class FetchPlanImpl implements FetchPlan {
         rules.add(rule);
     }
 
-    public boolean fetchable(Field field, Context context) {
+    public boolean fetchable(Field field) {
         for(FetchRule r : rules) {
-            FetchRule.Decision d = r.decide(field, context);
+            FetchRule.Decision d = r.decide(field);
             if(d == FetchRule.Decision.SKIP) {
                 return false;
             }

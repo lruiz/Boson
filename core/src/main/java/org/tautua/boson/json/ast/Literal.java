@@ -15,6 +15,11 @@ public class Literal extends SimpleNode {
     public Object getValue() {
         return value;
     }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public boolean equals(Object o) {

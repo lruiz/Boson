@@ -1,6 +1,6 @@
 package org.tautua.boson.json.core.adapters;
 
-import java.io.IOException;
+import org.tautua.boson.json.core.LiteralAdapter;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,16 +10,22 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class StringAdapterTest extends AbstractAdapterTest {
-    StringAdapter adapter = new StringAdapter();
-    public void testMarshal() throws IOException {
-        marshalAndAssert(adapter, "hello", "\"hello\"");
-    }
-    
-    public void testUnmarshal() {
-        unmarshalAndAssert(adapter, "hello", "hello");
+    @Override
+    public LiteralAdapter getAdapter() {
+        return new StringAdapter();
     }
 
-    public void testToString() {
-        assertEquals("Adapter(String)", adapter.toString());
+    @Override
+    public Object[][] getReadParams() {
+        return new Object[][]{
+            {"hello", "hello"}
+        };
+    }
+
+    @Override
+    public Object[][] getWriteParams() {
+        return new Object[][]{
+            {"hello", "\"hello\""}
+        };
     }
 }

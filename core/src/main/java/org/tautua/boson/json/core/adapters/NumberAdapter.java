@@ -16,9 +16,8 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.tautua.boson.json.Context;
+import org.tautua.boson.json.core.LiteralAdapter;
 import org.tautua.boson.json.core.TypeAdapterRegistryImpl;
-import org.tautua.boson.json.core.AbstractAdapter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -26,8 +25,8 @@ import java.io.Writer;
 /**
  * @author Larry Ruiz
  */
-public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T> {
-    public void _write(T t, Writer writer, Context context) throws IOException {
+public abstract class NumberAdapter<T extends Number> extends LiteralAdapter<T> {
+    public void _write(T t, Writer writer) throws IOException {
         writer.append(String.valueOf(t));
     }
 
@@ -37,7 +36,7 @@ public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T>
             adapterManager.register(byte.class, this);
         }
 
-        public Byte _read(Object value, Context context) {
+        public Byte _read(Object value) {
             return ((Number) value).byteValue();
         }
     }
@@ -48,7 +47,7 @@ public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T>
             adapterManager.register(short.class, this);
         }
 
-        public Short _read(Object value, Context context) {
+        public Short _read(Object value) {
             return ((Number) value).shortValue();
         }
     }
@@ -59,7 +58,7 @@ public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T>
             adapterManager.register(int.class, this);
         }
 
-        public Integer _read(Object value, Context context) {
+        public Integer _read(Object value) {
             return ((Number) value).intValue();
         }
     }
@@ -70,7 +69,7 @@ public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T>
             adapterManager.register(long.class, this);
         }
 
-        public Long _read(Object value, Context context) {
+        public Long _read(Object value) {
             return ((Number) value).longValue();
         }
 
@@ -82,7 +81,7 @@ public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T>
             adapterManager.register(float.class, this);
         }
 
-        public Float _read(Object value, Context context) {
+        public Float _read(Object value) {
             return ((Number) value).floatValue();
         }
     }
@@ -94,7 +93,7 @@ public abstract class NumberAdapter<T extends Number> extends AbstractAdapter<T>
             adapterManager.register(Number.class, this);
         }
 
-        public Double _read(Object value, Context context) {
+        public Double _read(Object value) {
             return ((Number) value).doubleValue();
         }
     }

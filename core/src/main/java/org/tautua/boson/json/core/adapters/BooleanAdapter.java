@@ -16,9 +16,8 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.tautua.boson.json.Context;
+import org.tautua.boson.json.core.LiteralAdapter;
 import org.tautua.boson.json.core.TypeAdapterRegistryImpl;
-import org.tautua.boson.json.core.AbstractAdapter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -26,17 +25,17 @@ import java.io.Writer;
 /**
  * @author Larry Ruiz
  */
-public class BooleanAdapter extends AbstractAdapter<Boolean> {
+public class BooleanAdapter extends LiteralAdapter<Boolean> {
     public void register(TypeAdapterRegistryImpl adapterManager) {
         adapterManager.register(Boolean.class, this);
         adapterManager.register(boolean.class, this);
     }
 
-    public Boolean _read(Object value, Context context) {
+    public Boolean _read(Object value) {
         return (Boolean) value;
     }
 
-    public void _write(Boolean val, Writer writer, Context context) throws IOException {
+    public void _write(Boolean val, Writer writer) throws IOException {
         writer.write(String.valueOf(val));
     }
 }

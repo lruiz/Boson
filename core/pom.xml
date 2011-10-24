@@ -33,7 +33,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- the plugin doesn't read it from the .jjt file -->
+                    <!-- the plugin doesn't coerce it from the .jjt file -->
                     <nodePackage>org.tautua.boson.json.ast</nodePackage>
                 </configuration>
             </plugin>

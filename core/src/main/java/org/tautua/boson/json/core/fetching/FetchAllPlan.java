@@ -16,7 +16,6 @@
 
 package org.tautua.boson.json.core.fetching;
 
-import org.tautua.boson.json.Context;
 import org.tautua.boson.json.FetchPlan;
 
 import java.lang.reflect.Field;
@@ -27,7 +26,7 @@ import java.lang.reflect.Field;
  * @author Larry Ruiz
  */
 public class FetchAllPlan implements FetchPlan {
-    public boolean fetchable(Field field, Context context) {
+    public boolean fetchable(Field field) {
         return true;
     }
 }

@@ -1,6 +1,6 @@
 package org.tautua.boson.json.core.adapters;
 
-import java.io.IOException;
+import org.tautua.boson.json.core.LiteralAdapter;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,11 +10,23 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class CharacterAdapterTest extends AbstractAdapterTest {
-    public void testMarshal() throws IOException {
-        marshalAndAssert(new CharacterAdapter(), 'a', "\"a\"");
+
+    @Override
+    public LiteralAdapter getAdapter() {
+        return new  CharacterAdapter();
     }
 
-    public void testUnmarshal() {
-        unmarshalAndAssert(new CharacterAdapter(), "h", 'h');
+    @Override
+    public Object[][] getReadParams() {
+        return new Object[][]{
+            {"h", 'h'},
+        };
+    }
+
+    @Override
+    public Object[][] getWriteParams() {
+        return new Object[][]{
+            { 'a', "\"a\""},
+        };
     }
 }

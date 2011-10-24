@@ -16,33 +16,25 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.tautua.boson.json.Context;
+import org.tautua.boson.json.ast.Array;
+import org.tautua.boson.json.core.ContainerAdapter;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * @author Larry Ruiz
  */
-public class ListAdapter<E> extends CollectionAdapter<List<E>, E> {
+public class ListAdapter<E> extends ContainerAdapter<E> {
     public ListAdapter(Class<E> componentType) {
         super(componentType);
     }
-
-    public List<E> _read(Object value, Context context) {
-        return unmarshalCollection(value, context);
+    
+    public List<E> coerce(Object val) {
+        return (List<E>) val; 
     }
 
-    protected List<E> createCollectionInstance() {
-        return new ArrayList<E>();
-    }
-
-    public String toString() {
-        StringBuilder buff = new StringBuilder();
-        buff.append("Adapter(List<");
-        //TODO: check for arrays
-        buff.append(containedType.getSimpleName());
-        buff.append(">)");
-        return buff.toString();
-    }
 }

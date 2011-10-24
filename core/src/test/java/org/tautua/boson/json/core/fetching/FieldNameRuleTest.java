@@ -18,12 +18,12 @@ public class FieldNameRuleTest extends TestCase {
 
         //includes
         rule = new FieldNameRule("lastName",true);
-        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName"), null));
-        assertEquals(FetchRule.Decision.FETCH, rule.decide(type.getDeclaredField("lastName"), null));
+        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName")));
+        assertEquals(FetchRule.Decision.FETCH, rule.decide(type.getDeclaredField("lastName")));
 
         //excludes
         rule = new FieldNameRule("lastName",false);
-        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName"), null));
-        assertEquals(FetchRule.Decision.SKIP, rule.decide(type.getDeclaredField("lastName"), null));
+        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName")));
+        assertEquals(FetchRule.Decision.SKIP, rule.decide(type.getDeclaredField("lastName")));
     }
 }

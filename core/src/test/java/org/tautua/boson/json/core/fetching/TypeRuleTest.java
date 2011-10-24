@@ -19,14 +19,14 @@ public class TypeRuleTest extends TestCase {
 
         //includes
         rule = new TypeRule(Task.class,true);
-        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName"), null));
-        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("lastName"), null));
-        assertEquals(FetchRule.Decision.FETCH, rule.decide(type.getDeclaredField("currentTask"), null));
+        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName")));
+        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("lastName")));
+        assertEquals(FetchRule.Decision.FETCH, rule.decide(type.getDeclaredField("currentTask")));
 
         //excludes
         rule = new TypeRule(Task.class,false);
-        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName"), null));
-        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("lastName"), null));
-        assertEquals(FetchRule.Decision.SKIP, rule.decide(type.getDeclaredField("currentTask"), null));
+        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("firstName")));
+        assertEquals(FetchRule.Decision.NOT_APPLY, rule.decide(type.getDeclaredField("lastName")));
+        assertEquals(FetchRule.Decision.SKIP, rule.decide(type.getDeclaredField("currentTask")));
     }
 }

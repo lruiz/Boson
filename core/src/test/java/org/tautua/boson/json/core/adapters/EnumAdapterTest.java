@@ -1,8 +1,7 @@
 package org.tautua.boson.json.core.adapters;
 
+import org.tautua.boson.json.core.LiteralAdapter;
 import org.tautua.foo.Status;
-
-import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,12 +11,22 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class EnumAdapterTest extends AbstractAdapterTest {
-
-    public void testMarshal() throws IOException {
-        marshalAndAssert(new EnumAdapter(Status.class), Status.OK, "\"OK\"");
+    @Override
+    public LiteralAdapter getAdapter() {
+        return new EnumAdapter(Status.class);
     }
-    
-    public void testUnmarshal() {
-        unmarshalAndAssert(new EnumAdapter(Status.class), "OK", Status.OK);
+
+    @Override
+    public Object[][] getReadParams() {
+        return new Object[][]{
+                {"OK", Status.OK}
+        };
+    }
+
+    @Override
+    public Object[][] getWriteParams() {
+        return new Object[][]{
+                {Status.OK, "\"OK\""}
+        };
     }
 }

@@ -16,8 +16,6 @@
 
 package org.tautua.boson.json.core;
 
-import org.tautua.boson.json.TypeAdapter;
-import org.tautua.boson.json.Context;
 import org.json.JSONObject;
 
 import java.io.Writer;
@@ -26,38 +24,37 @@ import java.io.IOException;
 /**
  * @author Larry Ruiz
  */
-public abstract class AbstractAdapter<T> extends TypeAdapterRegistryImpl.Component
-        implements TypeAdapter<T> {
+public abstract class LiteralAdapter<T> extends TypeAdapterRegistryImpl.Component {
 
-    public T read(Object value, Context context) {
+    public T coerce(Object value) {
         if (value == null || value == JSONObject.NULL) {
             return null;
         }
-        return _read(value, context);
+        return _read(value);
     }
 
-    public void write(T t, Writer writer, Context context) throws IOException {
+    public void write(T t, Writer writer) throws IOException {
         if (t == null) {
             writer.append("null");
         } else {
-            _write(t, writer, context);
+            _write(t, writer);
         }
     }
 
     /**
-     * Null safe read
+     * Null safe coerce
+     *
      * @param object
-     * @param context
      * @return
      */
-    protected abstract T _read(Object object, Context context);
+    protected abstract T _read(Object object);
 
     /**
      * Null safe write
+     *
      * @param t
      * @param writer
-     * @param context
      * @throws IOException
      */
-    protected abstract void _write(T t, Writer writer, Context context) throws IOException;
+    protected abstract void _write(T t, Writer writer) throws IOException;
 }

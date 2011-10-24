@@ -16,53 +16,31 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import static org.tautua.boson.utils.Exceptions.rethrow;
-import org.tautua.boson.json.Context;
-import org.tautua.boson.json.core.AbstractContainerAdapter;
+import org.tautua.boson.json.core.ContainerAdapter;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Larry Ruiz
  */
-public class ArrayAdapter<E> extends AbstractContainerAdapter<E[], E> {
+public class ArrayAdapter<E> extends ContainerAdapter<E> {
 
     public ArrayAdapter(Class<E> containedType) {
-        this.containedType = containedType;
+        super(containedType);
     }
 
-    public E[] _read(Object value, Context context) {
-        JSONArray jsonArray = (JSONArray) value;
-        E[] arr = (E[]) Array.newInstance(containedType, jsonArray.length());
-        for (int i = 0; i < jsonArray.length(); i++) {
-            Object v = null;
-            try {
-                v = jsonArray.get(i);
-            } catch (JSONException e) {
-                rethrow(e);
-            }
-
-            arr[i] = unmarshalElement(v, context);
-        }
-        return arr;
+    public E[] coerce(Object value) {
+        Collection<E> collection = (Collection) value;
+        E[] arr = (E[]) Array.newInstance(containedType, collection.size());
+        return collection.toArray(arr);
     }
 
-    public void _write(E[] t, Writer writer, Context context) throws IOException {
+    public void write(E[] t, Writer writer) throws IOException {
         writer.append("[");
-        Iterator<E> itr = Arrays.asList(t).iterator();
-        while (itr.hasNext()) {
-            E e = itr.next();
-            marshalElement(e, writer, context);
-            if (itr.hasNext()) {
-                writer.append(",");
-            }
-        }
         writer.append("]");
     }
 }

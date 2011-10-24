@@ -16,8 +16,6 @@
 
 package org.tautua.boson.json.core.fetching;
 
-import org.tautua.boson.json.Context;
-
 import java.lang.reflect.Field;
 
 /**
@@ -26,7 +24,7 @@ import java.lang.reflect.Field;
  * @author Larry Ruiz
  */
 public interface FetchRule {
-    Decision decide(Field field, Context context);
+    Decision decide(Field field);
 
     public static enum Decision {
         FETCH,

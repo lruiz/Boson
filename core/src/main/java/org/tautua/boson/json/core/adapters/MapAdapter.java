@@ -18,9 +18,8 @@ package org.tautua.boson.json.core.adapters;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import static org.tautua.boson.utils.Exceptions.rethrow;
-import org.tautua.boson.json.Context;
-import org.tautua.boson.json.core.AbstractContainerAdapter;
+
+import org.tautua.boson.json.core.ContainerAdapter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -31,32 +30,20 @@ import java.util.Map;
 /**
  * @author Larry Ruiz
  */
-public class MapAdapter<E> extends AbstractContainerAdapter<Map<String, E>, E> {
+public class MapAdapter<E> extends ContainerAdapter<E> {
+    
     public MapAdapter(Class<E> containedType) {
-        this.containedType = containedType;
+        super(containedType);
     }
 
-    public Map<String, E> _read(Object value, Context context) {
+    public Map<String, E> coerce(Object value) {
         JSONObject jsonObject = (JSONObject) value;
         Map<String, E> current = new HashMap<String, E>();
 
-        Iterator it = jsonObject.keys();
-        while (it.hasNext()) {
-            String key = (String) it.next();
-            Object jsonValue = null;
-            try {
-                jsonValue = jsonObject.get(key);
-            } catch (JSONException e) {
-                rethrow(e);
-            }
-
-            E e = unmarshalElement(jsonValue, context);
-            current.put(key, e);
-        }
         return current;
     }
 
-    public void _write(Map<String, E> map, Writer writer, Context context) throws IOException {
+    public void _write(Map<String, E> map, Writer writer) throws IOException {
         writer.append("{");
         Iterator<Map.Entry<String, E>> itr = map.entrySet().iterator();
         while (itr.hasNext()) {
@@ -64,7 +51,6 @@ public class MapAdapter<E> extends AbstractContainerAdapter<Map<String, E>, E> {
             E e = entry.getValue();
             //TODO: escaping, null TypeAdapter
             writer.append("\"").append(entry.getKey()).append("\":");
-            marshalElement(e, writer, context);
             if (itr.hasNext()) {
                 writer.append(",");
             }

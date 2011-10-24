@@ -17,23 +17,20 @@
 package org.tautua.boson.json.core;
 
 import org.tautua.boson.json.TypeAdapterRegistry;
-import org.tautua.boson.json.TypeAdapter;
 import org.tautua.boson.json.core.adapters.*;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Larry Ruiz
  */
 public class TypeAdapterRegistryImpl implements TypeAdapterRegistry {
-    private Map<Class<?>, TypeAdapter> typeAdapters = new HashMap<Class<?>, TypeAdapter>();
-    private Map<Class<?>, ContainerAdapterFactory> adapterFactoriesMap = new HashMap<Class<?>, ContainerAdapterFactory>();
-    private ParameterizedAdapterFactory beanAdapterFactory;
-    private ContainerAdapterFactory arrayAdapterFactory;
-    private ParameterizedAdapterFactory enumAdapterFactory;
+    private Map<Class<?>, LiteralAdapter> literalAdapters = new HashMap<Class<?>, LiteralAdapter>();
+    private Map<Class<?>, ContainerAdapter> containerAdapters = new HashMap<Class<?>, ContainerAdapter>();
 
 
     public TypeAdapterRegistryImpl() {
@@ -48,83 +45,38 @@ public class TypeAdapterRegistryImpl implements TypeAdapterRegistry {
         new NumberAdapter.FloatAdapter().register(this);
         new NumberAdapter.DoubleAdapter().register(this);
 
-        new UnknownTypeAdapter().register(this);
 
         //BASIC CONTAINER TYPE
-        new ListAdapterFactory().register(this);
-        new SetAdapterFactory().register(this);
-        new MapAdapterFactory().register(this);
-
-        arrayAdapterFactory = new ArrayAdapterFactory();
-        beanAdapterFactory = new BeanAdapterFactory();
-        enumAdapterFactory = new EnumAdapterFactory();
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T> TypeAdapter<T> findAdapter(Class<T> type) {
-        return (TypeAdapter<T>) findTypeAdapter(TypeInfo.describe(type));
-    }
-
-    public TypeAdapter<?> findAdapter(Field field) {
-        return findTypeAdapter(TypeInfo.describe(field));
-    }
-
-    protected TypeAdapter<?> findTypeAdapter(TypeInfo typeInfo) {
-        TypeAdapter<?> typeAdapter;
-        if (typeInfo.isEnum()) {
-            typeAdapter = enumAdapterFactory.create(typeInfo.getRawType());
-        } else if (typeInfo.hasAugmentations()) {
-            if (typeInfo.isArray()) {
-                typeAdapter = arrayAdapterFactory.create(checkAndGetContainedType(typeInfo));
-            } else {
-                ContainerAdapterFactory f = adapterFactoriesMap.get(typeInfo.getRawType());
-                typeAdapter = f.create(checkAndGetContainedType(typeInfo));
-            }
-        } else {
-            typeAdapter = typeAdapters.get(typeInfo.getRawType());
-            if (typeAdapter == null) {
-                typeAdapter = beanAdapterFactory.create(typeInfo.getRawType());
-            }
+    public <T> LiteralAdapter<T> findLiteralAdapter(Class<T> type) {
+        if(type.isEnum()) {
+            return new EnumAdapter(type);
         }
-        return typeAdapter;
+        return literalAdapters.get(type);
     }
 
-    protected Class<?> checkAndGetContainedType(TypeInfo typeInfo) {
-        Class<?> containedType;
-        Type[] types = typeInfo.getActualTypeAugmentations();
-        if (types[0] instanceof Class) {
-            containedType = (Class) types[0];
-        } else {
-            //TODO: add message o provide custom exception
-            throw new IllegalArgumentException();
+    public ContainerAdapter findContainerAdapter(Class<?> containerType) {
+        if(containerType.isArray()) {
+            return new ArrayAdapter(containerType.getComponentType());
+        } else if(Set.class.isAssignableFrom(containerType)) {
+            return new SetAdapter(Object.class);
+        } else if(Collection.class.isAssignableFrom(containerType)) {
+            return new ListAdapter(Object.class);
         }
-
-        return containedType;
+        
+        throw new IllegalArgumentException("Not an array or collection");
     }
 
-    public void setBeanAdapterFactory(ParameterizedAdapterFactory beanAdapterFactory) {
-        this.beanAdapterFactory = beanAdapterFactory;
-    }
-
-    public void setEnumAdapterFactory(ParameterizedAdapterFactory enumAdapterFactory) {
-        this.enumAdapterFactory = enumAdapterFactory;
-    }
-
-    public void setArrayAdapterFactory(ContainerAdapterFactory arrayAdapterFactory) {
-        this.arrayAdapterFactory = arrayAdapterFactory;
-    }
-
-    public void register(Class type, TypeAdapter typeAdapter) {
-        typeAdapters.put(type, typeAdapter);        
-    }
-
-    public void register(Class type, ContainerAdapterFactory adapterFactory) {
-        adapterFactoriesMap.put(type, adapterFactory);
+    public void register(Class type, LiteralAdapter literalAdapter) {
+        literalAdapters.put(type, literalAdapter);        
     }
 
     /**
      * @author Larry Ruiz
      */
+    @Deprecated
     public abstract static class Component {
         public void register(TypeAdapterRegistryImpl adapterManager){
             throw new UnsupportedOperationException();            

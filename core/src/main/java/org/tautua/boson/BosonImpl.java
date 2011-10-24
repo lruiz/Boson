@@ -16,9 +16,9 @@
 
 package org.tautua.boson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.tautua.boson.json.ast.Node;
+import org.tautua.boson.json.parser.ParseException;
+import org.tautua.boson.json.parser.Parser;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -34,33 +34,20 @@ public class BosonImpl implements Boson {
 
     @Override
     public Object read(Reader reader) {
-        try {
-            JSONObject jobj = new JSONObject(new JSONTokener(reader));
-            String className = (String) jobj.get("class");
-            if (className != null) {
-                Class expectedType = Class.forName(className);
-                return _read(jobj, expectedType);
-            }
-        } catch (JSONException e) {
-            throw new BosonException(e);
-        } catch (ClassNotFoundException e) {
-            throw new BosonException(e);
-        }
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return read(reader, Object.class);
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> expectedType) {
         try {
-            JSONObject jobj = new JSONObject(new JSONTokener(reader));
-            return _read(jobj, expectedType);
-        } catch (JSONException e) {
+            Parser p = new Parser(reader);
+            Node n = p.parse();
+            Transformer<T> t = new Transformer<T>(expectedType);
+            n.accept(t);
+            return t.get();
+        } catch (ParseException e) {
             throw new BosonException(e);
         }
-    }
-
-    protected <T> T _read(JSONObject jobj, Class<T> expectedType) {
-        return null;
     }
 
 

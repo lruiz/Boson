@@ -9,6 +9,9 @@ public class Instance extends SimpleNode {
         super(id);
     }
 
-
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }
 

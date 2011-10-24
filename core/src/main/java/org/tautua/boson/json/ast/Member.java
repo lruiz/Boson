@@ -14,6 +14,11 @@ public class Member extends SimpleNode {
     public void setName(String name) {
         this.name = name;
     }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -16,6 +16,7 @@ options {
 PARSER_BEGIN(Parser)
 package org.tautua.boson.json.parser;
 
+import java.math.*;
 import org.tautua.boson.json.ast.*;
 
 public class Parser {
@@ -111,8 +112,8 @@ void Literal() #Literal : {
 } {
     (
       t = <STRING_LITERAL> { jjtThis.setValue(t.image.substring(1, t.image.length()-1)); }
-    | t = <INTEGER_NUMBER> { jjtThis.setValue(new Long(t.image)); }
-    | t = <FLOATING_NUMBER> { jjtThis.setValue(new Double(t.image)); }
+    | t = <INTEGER_NUMBER> { jjtThis.setValue(new BigInteger(t.image)); }
+    | t = <FLOATING_NUMBER> { jjtThis.setValue(new BigDecimal(t.image)); }
     | <TRUE> { jjtThis.setValue(true); }
     | <FALSE> { jjtThis.setValue(false); }
     | <NULL>

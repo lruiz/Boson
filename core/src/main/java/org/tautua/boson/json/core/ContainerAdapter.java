@@ -16,11 +16,20 @@
 
 package org.tautua.boson.json.core;
 
-import org.tautua.boson.json.TypeAdapter;
-
 /**
- * @author
+ * @author Larry Ruiz
  */
-public interface ContainerAdapter<T, E> extends TypeAdapter<T> {
-    Class<E> getContainedType();
+public abstract class ContainerAdapter<E> {
+
+    protected Class<E> containedType;
+
+    protected ContainerAdapter(Class<E> containedType) {
+        this.containedType = containedType;
+    }
+
+    public Class<E> getContainedType() {
+        return containedType;
+    }
+    
+    public abstract Object coerce(Object val);
 }

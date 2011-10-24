@@ -1,5 +1,7 @@
 package org.tautua.boson.json.core.adapters;
 
+import org.tautua.boson.json.core.LiteralAdapter;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Lruiz
@@ -9,9 +11,22 @@ package org.tautua.boson.json.core.adapters;
  */
 public class ShortAdapterTest extends AbstractAdapterTest {
 
-    public void testUnmarshal() {
-        unmarshalAndAssert(new NumberAdapter.ShortAdapter(), new Integer(5), (short)5);
-        unmarshalAndAssert(new NumberAdapter.ShortAdapter(), new Long(10), (short)10);
+    @Override
+    public LiteralAdapter getAdapter() {
+        return new NumberAdapter.ShortAdapter();
     }
 
+    @Override
+    public Object[][] getReadParams() {
+        return new Object[][]{
+            {new Integer(5), (short) 5}
+        };
+    }
+
+    @Override
+    public Object[][] getWriteParams() {
+        return new Object[][]{
+            {(short) 5, "5"}
+        };
+    }
 }

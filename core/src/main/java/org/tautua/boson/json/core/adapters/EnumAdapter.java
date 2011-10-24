@@ -16,8 +16,7 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.tautua.boson.json.Context;
-import org.tautua.boson.json.core.AbstractAdapter;
+import org.tautua.boson.json.core.LiteralAdapter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -25,19 +24,19 @@ import java.io.Writer;
 /**
  * @author Larry Ruiz
  */
-public class EnumAdapter<T extends Enum<T>> extends AbstractAdapter<T> {
+public class EnumAdapter<T extends Enum<T>> extends LiteralAdapter<T> {
     private Class<T> enumType;
 
     public EnumAdapter(Class<T> enumType) {
         this.enumType = enumType;
     }
 
-    public T _read(Object value, Context context) {
+    public T _read(Object value) {
         String name = (String) value;
         return Enum.valueOf(enumType, name);
     }
 
-    public void _write(T t, Writer writer, Context context) throws IOException {
+    public void _write(T t, Writer writer) throws IOException {
         writer.append("\"").append(t.name()).append("\"");
     }
 }

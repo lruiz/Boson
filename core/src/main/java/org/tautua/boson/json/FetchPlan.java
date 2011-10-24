@@ -24,5 +24,5 @@ import java.lang.reflect.Field;
  * @author Larry Ruiz
  */
 public interface FetchPlan {
-    boolean fetchable(Field field, Context context);
+    boolean fetchable(Field field);
 }

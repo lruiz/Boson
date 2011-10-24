@@ -16,34 +16,24 @@
 
 package org.tautua.boson.json.core.adapters;
 
-import org.tautua.boson.json.Context;
+import org.tautua.boson.json.ast.Array;
+import org.tautua.boson.json.core.ContainerAdapter;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @author Larry Ruiz
  */
-public class SetAdapter<E> extends CollectionAdapter<Set<E>, E> {
+public class SetAdapter<E> extends ContainerAdapter<E> {
     public SetAdapter(Class<E> componentType) {
         super(componentType);
     }
 
-    protected Set<E> createCollectionInstance() {
-        return new HashSet<E>();
-    }
-
-    public Set<E> _read(Object value, Context context) {
-        return unmarshalCollection(value, context);
-    }
-
-    public String toString() {
-        StringBuilder buff = new StringBuilder();
-        buff.append("Adapter(Set<");
-        //TODO: check for arrays
-        buff.append(containedType.getSimpleName());
-        buff.append(">)");
-
-        return buff.toString();
+    public Set<E> coerce(Object value) {
+        return new HashSet<E>((Collection) value);
     }
 }

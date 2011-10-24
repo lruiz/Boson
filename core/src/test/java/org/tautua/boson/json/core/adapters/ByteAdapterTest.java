@@ -1,5 +1,7 @@
 package org.tautua.boson.json.core.adapters;
 
+import org.tautua.boson.json.core.LiteralAdapter;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Lruiz
@@ -9,13 +11,23 @@ package org.tautua.boson.json.core.adapters;
  */
 public class ByteAdapterTest extends AbstractAdapterTest {
 
-    public void testMarshal() {
-        marshalAndAssert(new NumberAdapter.ByteAdapter(), (byte)5, "5");
-    }    
-
-    public void testUnmarshal() {
-        unmarshalAndAssert(new NumberAdapter.ByteAdapter(), new Integer(5), (byte)5);
-        unmarshalAndAssert(new NumberAdapter.ByteAdapter(), new Long(10), (byte)10);
+    @Override
+    public LiteralAdapter getAdapter() {
+        return new  NumberAdapter.ByteAdapter();
     }
 
+    @Override
+    public Object[][] getReadParams() {
+        return new Object[][]{
+            {new Integer(5), (byte) 5},
+            {new Long(10), (byte) 10},
+        };
+    }
+
+    @Override
+    public Object[][] getWriteParams() {
+        return new Object[][]{
+            {(byte) 5, "5"},
+        };
+    }
 }
